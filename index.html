@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>School Board</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-</head>
-<body>
-  <nav id="sidebar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>School Board</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav id="sidebar">
     <div class="logo">
       <span>SchBoard</span>
     </div>
@@ -50,7 +53,7 @@
 
       <div class="profile">
         <img src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=pda-9385&scale=80&eyes=closed,closed2,cute,glasses,love,plain,shades,sleepClose,stars,wink,wink2&mouth=cute,kissHeart,lilSmile,smileLol,smileTeeth,tongueOut,wideSmile" alt=".">
-        <!-- seed=Felix -->
+        
         <span>Admin</span>
       </div>
     </header>
@@ -148,6 +151,20 @@
     </section>
   </main>
 
- <script src="script.js"></script>
-</body>
+    <section style="display: none;" id="section-add">
+      <main id="add-student">
+        <div class="title">
+          <h1>Adicione um aluno(a)</h1>
+        </div>
+        <div class="div-input">
+          <input type="text" id="name" placeholder="Nome" />
+          <input type="text" id="surname" placeholder="Sobrenome" />
+          <input min="0" max="10" type="number" id="note" placeholder="Nota" />
+        </div>
+        <button>Adicionar</button>
+      </main>
+    </section>
+
+    <script src="script.js"></script>
+  </body>
 </html>
