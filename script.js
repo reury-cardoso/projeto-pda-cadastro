@@ -8,3 +8,8 @@ let date = currentDate.toLocaleDateString('pt-BR', options)
 
 dateTag.innerText = date
 
+async function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
