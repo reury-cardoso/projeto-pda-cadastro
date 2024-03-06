@@ -15,6 +15,7 @@ body {
 }
 
 #sidebar {
+  position: fixed;
   padding: 20px 20px;
   width: 16%;
   display: flex;
@@ -65,8 +66,6 @@ body {
 
 #list-social li {
   display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 #data {
@@ -85,6 +84,8 @@ body {
 }
 
 #dashbood {
+  margin-left: 17.3%;
+  height: max-content;
   width: 100%;
   padding: 20px 25px;
   background-color: #f8f8ff;
@@ -227,8 +228,8 @@ body {
   > span {
     display: block;
     height: 100%;
-    width: 50%;
-    background-color: red;
+    /* width: 50%;
+    background-color: red; */
     border-radius: 30px;
   }
 }
@@ -237,7 +238,7 @@ body {
   > button {
     margin: 8px;
     border: none;
-    background-color: #ffffff;
+    background-color: transparent;
     color: rgba(255, 201, 113, 0.7);
   }
 }
@@ -350,6 +351,13 @@ body {
   }
 }
 
+a { 
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+    align-items: center;
+    gap: 10px;
+ } 
 
 .hidden {
   opacity: 0;
