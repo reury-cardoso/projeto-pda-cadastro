@@ -282,12 +282,13 @@ body {
 }
 
 #add-student {
-  padding: 100px;
+  padding: 20px 100px;
   display: flex;
   flex-direction: column;
   
 
   text-align: center;
+  justify-content: center;
 
   height: 80%;
   width: 40%;
@@ -297,8 +298,18 @@ body {
 
   gap: 40px;
 
+  > #close {
+    display: flex;
+    justify-content: end;
+
+    position: absolute;
+    z-index: 2;
+    top: 12.5%;
+    right: 32%;
+  }
+
   > .title {
-    color: #cc5803;
+    color: #cc5803; 
     font-size: 22px;
     font-weight: 600;
   }
@@ -337,4 +348,17 @@ body {
   > input:focus {
     border: 2px solid #e2711d;
   }
+}
+
+
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease-in-out, visibility 0s linear 0.5s;
+}
+
+.visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease-in-out, visibility 0s linear;
 }
