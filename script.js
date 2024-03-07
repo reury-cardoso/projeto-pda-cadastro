@@ -29,6 +29,10 @@ function showHide(tagID) {
 
 const buttonAdd = document.getElementById("button-add");
 buttonAdd.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
   showHide("section-add");
 });
 
@@ -37,13 +41,12 @@ buttonClose.addEventListener("click", () => {
   showHide("section-add");
 });
 
-
-
 function createStudentHtml(id, name, note, status, performance) {
   let headerBody = document.getElementsByClassName("header-body")[0];
 
   let tr = document.createElement("tr");
-  tr.classList.add("student", "id132");
+  tr.classList.add("student", "visible");
+  tr.id = `id${id}`
 
   let th1 = document.createElement("th");
   th1.textContent = id;
@@ -76,16 +79,19 @@ function createStudentHtml(id, name, note, status, performance) {
   let div = document.createElement("div");
   div.setAttribute("id", "loading-bar");
   let span2 = document.createElement("span");
-
-  let colorStyle;
-  if(note <= 3){
-    colorStyle = '#FF5722'
-  }else if(note <= 7){
-    colorStyle = '#ff9800'
-  }else{
-    colorStyle = '#4caf50'
-  };
   span2.style.width = performance;
+  let colorStyle;
+  if (note <= 3) {
+    colorStyle = "#FF5722";
+    performance = 'Insuficiente';
+  } else if (note <= 7) {
+    colorStyle = "#ff9800";
+    performance = 'Bom';
+  } else {
+    colorStyle = "#4caf50";
+    performance = 'Excelente'
+  }
+  
   span2.style.backgroundColor = colorStyle;
 
   div.appendChild(span2);
@@ -98,14 +104,14 @@ function createStudentHtml(id, name, note, status, performance) {
   let th6 = document.createElement("th");
   th6.classList.add("actions");
   let button1 = document.createElement("button");
-  button1.setAttribute('onclick', `editStudent(${id})`)
+  button1.setAttribute("onclick", `editStudent(${id})`);
   let img1 = document.createElement("img");
   img1.setAttribute("src", "icon-edit.svg");
   img1.setAttribute("alt", "");
   button1.appendChild(img1);
 
   let button2 = document.createElement("button");
-  button2.setAttribute('onclick', `deleteStudent(${id})`)
+  button2.setAttribute("onclick", `deleteStudent(${id})`);
   let img2 = document.createElement("img");
   img2.setAttribute("src", "icon-trash.svg");
   img2.setAttribute("alt", "");
@@ -113,7 +119,6 @@ function createStudentHtml(id, name, note, status, performance) {
 
   th6.appendChild(button1);
   th6.appendChild(button2);
-
 
   tr.appendChild(th1);
   tr.appendChild(th2);
@@ -125,45 +130,80 @@ function createStudentHtml(id, name, note, status, performance) {
   headerBody.appendChild(tr);
 }
 
-let students = JSON.parse(localStorage.getItem("studentsDate")) == null ? [] : JSON.parse(localStorage.getItem("studentsDate"));
+let students =
+  JSON.parse(localStorage.getItem("studentsDate")) == null
+    ? []
+    : JSON.parse(localStorage.getItem("studentsDate"));
 localStorage.setItem("studentsDate", JSON.stringify(students));
 
-students.forEach(studentArray => {
-  createStudentHtml(studentArray.id, studentArray.name, studentArray.note, studentArray.status, studentArray.performance)
+students.forEach((studentArray) => {
+  createStudentHtml(
+    studentArray.id,
+    studentArray.name,
+    studentArray.note,
+    studentArray.status,
+    studentArray.performance
+  );
 });
 
-function generateID(){
+function generateID() {
   let idGenerated = Math.floor(Math.random() * (999 - 10000 + 1)) + 10000;
-  for(const studentArray of students){
-    if(studentArray.id == idGenerated){
-      generateID()
-      break
+  for (const studentArray of students) {
+    if (studentArray.id == idGenerated) {
+      generateID();
+      break;
     }
   }
-  return idGenerated
+  return idGenerated;
 }
 
 const addRealbutton = document.getElementById("addReal");
 addRealbutton.addEventListener("click", async () => {
+  
   const name = document.getElementById("name");
   const surname = document.getElementById("surname");
   const note = document.getElementById("note");
 
   if (name.value == "" || surname.value == "" || note.value == "") {
     alert("Preencha os dados");
-  }else if(note.value > 10 || note.value < 0){
+  } else if (note.value > 10 || note.value < 0) {
     alert("Preencha a nota com 0 ou mais 10 ou menos");
-  }else {
-    var id = generateID()
+  } else {
+    var id = generateID();
     let student = await new CreateStudent(
       id,
       name.value,
       surname.value,
       note.value
     );
-    createStudentHtml(student.id, student.name, student.note, student.status, student.performance)
+    createStudentHtml(
+      student.id,
+      student.name,
+      student.note,
+      student.status,
+      student.performance
+    );
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
+    
+  
     showHide("section-add");
     await students.push(student);
     localStorage.setItem("studentsDate", JSON.stringify(students));
   }
 });
+
+async function deleteStudent(id){
+  let studentDiv = document.getElementById(`id${id}`)
+  await showHide(`id${id}`)
+  await sleep(500)
+  studentDiv.remove()
+  let index = students.findIndex(function(student) {
+    return student.id === id;
+  });
+
+  students.splice(index, 1)
+  localStorage.setItem("studentsDate", JSON.stringify(students));
+}
