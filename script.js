@@ -1,11 +1,13 @@
 class CreateStudent {
-  constructor(id, name, surname, note) {
+  constructor(id, name, note, status) {
     this.id = id;
-    this.name = `${name} ${surname}`;
+    this.name = name;
     this.note = note;
-    this.status = "not-analyzed";
-    this.performance = `${note}0%`;
+    this.status = status;
+    this.performance = `${+note * 10}%`;
   }
+
+  updateStudent(id, name, status, note) {}
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -25,6 +27,8 @@ function showHide(tagID) {
   const divTag = document.getElementById(tagID);
   divTag.classList.toggle("hidden");
   divTag.classList.toggle("visible");
+
+  document.body.style.overflow = "visible";
 }
 
 const buttonAdd = document.getElementById("button-add");
@@ -34,19 +38,24 @@ buttonAdd.addEventListener("click", () => {
     behavior: "smooth",
   });
   showHide("section-add");
+  document.body.style.overflow = "hidden";
 });
 
 const buttonClose = document.getElementById("close");
 buttonClose.addEventListener("click", () => {
   showHide("section-add");
 });
+const buttonCloseEdit = document.getElementById("close-edit");
+buttonCloseEdit.addEventListener("click", () => {
+  showHide("section-edit");
+});
 
 function createStudentHtml(id, name, note, status, performance) {
-  let headerBody = document.getElementsByClassName("header-body")[0];
+  const headerBody = document.getElementsByClassName("header-body")[0];
 
   let tr = document.createElement("tr");
   tr.classList.add("student", "visible");
-  tr.id = `id${id}`
+  tr.id = `id${id}`;
 
   let th1 = document.createElement("th");
   th1.textContent = id;
@@ -83,15 +92,15 @@ function createStudentHtml(id, name, note, status, performance) {
   let colorStyle;
   if (note <= 3) {
     colorStyle = "#FF5722";
-    performance = 'Insuficiente';
+    performance = "Insuficiente";
   } else if (note <= 7) {
     colorStyle = "#ff9800";
-    performance = 'Bom';
+    performance = "Bom";
   } else {
     colorStyle = "#4caf50";
-    performance = 'Excelente'
+    performance = "Excelente";
   }
-  
+
   span2.style.backgroundColor = colorStyle;
 
   div.appendChild(span2);
@@ -159,7 +168,6 @@ function generateID() {
 
 const addRealbutton = document.getElementById("addReal");
 addRealbutton.addEventListener("click", async () => {
-  
   const name = document.getElementById("name");
   const surname = document.getElementById("surname");
   const note = document.getElementById("note");
@@ -169,12 +177,15 @@ addRealbutton.addEventListener("click", async () => {
   } else if (note.value > 10 || note.value < 0) {
     alert("Preencha a nota com 0 ou mais 10 ou menos");
   } else {
-    var id = generateID();
+    const id = generateID();
+
+    let status = "not-analyzed";
+
     let student = await new CreateStudent(
       id,
-      name.value,
-      surname.value,
-      note.value
+      `${name.value} ${surname.value}`,
+      note.value,
+      status
     );
     createStudentHtml(
       student.id,
@@ -183,27 +194,98 @@ addRealbutton.addEventListener("click", async () => {
       student.status,
       student.performance
     );
+
     window.scrollTo({
       top: document.body.scrollHeight,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
-    
-  
+
     showHide("section-add");
     await students.push(student);
     localStorage.setItem("studentsDate", JSON.stringify(students));
   }
 });
 
-async function deleteStudent(id){
-  let studentDiv = document.getElementById(`id${id}`)
-  await showHide(`id${id}`)
-  await sleep(500)
-  studentDiv.remove()
-  let index = students.findIndex(function(student) {
+async function deleteStudent(id) {
+  let studentDiv = document.getElementById(`id${id}`);
+  await showHide(`id${id}`);
+  await sleep(500);
+  studentDiv.remove();
+  let index = students.findIndex(function (student) {
     return student.id === id;
   });
 
-  students.splice(index, 1)
+  students.splice(index, 1);
   localStorage.setItem("studentsDate", JSON.stringify(students));
 }
+
+function editStudent(id) {
+  const idTag = document.getElementById("idTag");
+  const nameEdit = document.getElementById("name-edit");
+  const noteEdit = document.getElementById("note-edit");
+  const statusEdit = document.querySelectorAll('input[name="statusEdit"]');
+
+  console.log(statusEdit);
+
+  let index = students.findIndex(function (student) {
+    return student.id === id;
+  });
+
+  statusEdit.forEach((input) => {
+    if (input.value === students[index].status) {
+      input.checked = true;
+    } else {
+      input.checked = false;
+    }
+  });
+
+  idTag.value = students[index].id;
+  nameEdit.value = students[index].name;
+  noteEdit.value = students[index].note;
+
+  showHide("section-edit");
+}
+
+// async function editStudentReal() {
+
+// }
+
+const editRealButton = document.getElementById("editReal");
+editRealButton.addEventListener("click", async () => {
+  const idTag = +document.getElementById("idTag").value;
+  const nameEdit = document.getElementById("name-edit").value;
+  const noteEdit = +document.getElementById("note-edit").value;
+  const statusEdit = document.querySelector(
+    'input[name="statusEdit"]:checked'
+  ).value;
+
+  let index = students.findIndex(function (student) {
+    return student.id === idTag;
+  });
+
+  let studentEdit = await new CreateStudent(
+    idTag,
+    nameEdit,
+    noteEdit,
+    statusEdit
+  );
+
+  console.log(students)
+
+  students[index] = await studentEdit;
+
+  const headerBody = document.getElementsByClassName("header-body")[0];
+  headerBody.innerHTML = ''
+
+  students.forEach((studentArray) => {
+    createStudentHtml(
+      studentArray.id,
+      studentArray.name,
+      studentArray.note,
+      studentArray.status,
+      studentArray.performance
+    );
+  });
+  localStorage.setItem("studentsDate", JSON.stringify(students));
+  showHide("section-edit");
+});

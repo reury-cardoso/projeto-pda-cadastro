@@ -270,7 +270,7 @@ body {
   color: #965e00;
 }
 
-#section-add {
+#section-add, #section-edit{
   width: 100%;
   height: 100%;
   display: flex;
@@ -282,7 +282,7 @@ body {
   backdrop-filter: blur(4px); 
 }
 
-#add-student {
+#add-student, #edit-student {
   padding: 20px 100px;
   display: flex;
   flex-direction: column;
@@ -299,7 +299,7 @@ body {
 
   gap: 40px;
 
-  > #close {
+  > #close, #close-edit {
     display: flex;
     justify-content: end;
 
@@ -369,4 +369,37 @@ a {
   opacity: 1;
   visibility: visible;
   transition: opacity 0.5s ease-in-out, visibility 0s linear;
+}
+
+#edit-student {
+  gap: 20px;
+}
+
+.div-input-edit {
+  gap: 14px;
+  > label {
+    padding: 10px;
+    font-weight: 600;
+    font-size: 18px;
+    background-color: rgba(255, 169, 30, 0.7);
+    border-radius: 10px 10px 0 0;
+  }
+  > input{
+    margin-top: -20px;
+    padding: 10px 05px 10px 10px;
+  
+}
+#status-op-edit {
+  padding: 20px 35px 20px 20px;
+    border-radius: 0 0 10px 10px;
+    border: 2px solid #f1f4ff;
+    margin-top: -14px;
+
+    > input {
+      
+      border-radius: 0 0 10px 10px;
+      border: 2px solid #f1f4ff;
+      margin: 0 4px 0 4px;
+    }
+}
 }
