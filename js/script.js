@@ -115,14 +115,14 @@ function createStudentHtml(id, name, note, status, performance) {
   let button1 = document.createElement("button");
   button1.setAttribute("onclick", `editStudent(${id})`);
   let img1 = document.createElement("img");
-  img1.setAttribute("src", "icon-edit.svg");
+  img1.setAttribute("src", "./assets/icon-edit.svg");
   img1.setAttribute("alt", "");
   button1.appendChild(img1);
 
   let button2 = document.createElement("button");
   button2.setAttribute("onclick", `deleteStudent(${id})`);
   let img2 = document.createElement("img");
-  img2.setAttribute("src", "icon-trash.svg");
+  img2.setAttribute("src", "./assets/icon-trash.svg");
   img2.setAttribute("alt", "");
   button2.appendChild(img2);
 
@@ -155,6 +155,24 @@ students.forEach((studentArray) => {
   );
 });
 
+async function addTagError(nameErro) {
+  let documentBody = document.getElementById('erro-div');
+   documentBody.innerHTML +=  `<div id="erroTag" class="error hidden">
+  <div class="error__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" height="24" fill="none"><path fill="#393a37" d="m13 13h-2v-6h2zm0 4h-2v-2h2zm-1-15c-1.3132 0-2.61358.25866-3.82683.7612-1.21326.50255-2.31565 1.23915-3.24424 2.16773-1.87536 1.87537-2.92893 4.41891-2.92893 7.07107 0 2.6522 1.05357 5.1957 2.92893 7.0711.92859.9286 2.03098 1.6651 3.24424 2.1677 1.21325.5025 2.51363.7612 3.82683.7612 2.6522 0 5.1957-1.0536 7.0711-2.9289 1.8753-1.8754 2.9289-4.4189 2.9289-7.0711 0-1.3132-.2587-2.61358-.7612-3.82683-.5026-1.21326-1.2391-2.31565-2.1677-3.24424-.9286-.92858-2.031-1.66518-3.2443-2.16773-1.2132-.50254-2.5136-.7612-3.8268-.7612z"></path></svg>
+  </div>
+  <div class="error__title">${nameErro}</div>
+</div>`;
+  await sleep(50);
+  showHide("erroTag")
+  await sleep(3000);
+  await showHide("erroTag")
+  await sleep(100);
+  let erroTag = document.getElementById('erroTag')
+  erroTag.remove()
+  return
+}
+
 function generateID() {
   let idGenerated = Math.floor(Math.random() * (999 - 10000 + 1)) + 10000;
   for (const studentArray of students) {
@@ -173,9 +191,9 @@ addRealbutton.addEventListener("click", async () => {
   const note = document.getElementById("note");
 
   if (name.value == "" || surname.value == "" || note.value == "") {
-    alert("Preencha os dados");
+    await addTagError("ERRO: Preencha todos os campos obrigatórios.");
   } else if (note.value > 10 || note.value < 0) {
-    alert("Preencha a nota com 0 ou mais 10 ou menos");
+    await addTagError("ERRO: Certifique-se de que a nota esteja entre 0 e 10.");
   } else {
     const id = generateID();
 
@@ -225,8 +243,6 @@ function editStudent(id) {
   const noteEdit = document.getElementById("note-edit");
   const statusEdit = document.querySelectorAll('input[name="statusEdit"]');
 
-  console.log(statusEdit);
-
   let index = students.findIndex(function (student) {
     return student.id === id;
   });
@@ -259,33 +275,37 @@ editRealButton.addEventListener("click", async () => {
     'input[name="statusEdit"]:checked'
   ).value;
 
-  let index = students.findIndex(function (student) {
-    return student.id === idTag;
-  });
-
-  let studentEdit = await new CreateStudent(
-    idTag,
-    nameEdit,
-    noteEdit,
-    statusEdit
-  );
-
-  console.log(students)
-
-  students[index] = await studentEdit;
-
-  const headerBody = document.getElementsByClassName("header-body")[0];
-  headerBody.innerHTML = ''
-
-  students.forEach((studentArray) => {
-    createStudentHtml(
-      studentArray.id,
-      studentArray.name,
-      studentArray.note,
-      studentArray.status,
-      studentArray.performance
+  if (nameEdit == "" || noteEdit == "" || statusEdit == "") {
+    await addTagError("ERRO: Preencha todos os campos obrigatórios.");
+  } else if (noteEdit > 10 || noteEdit < 0) {
+    await addTagError("ERRO: Certifique-se de que a nota esteja entre 0 e 10.");
+  } else {
+    let index = students.findIndex(function (student) {
+      return student.id === idTag;
+    });
+  
+    let studentEdit = await new CreateStudent(
+      idTag,
+      nameEdit,
+      noteEdit,
+      statusEdit
     );
-  });
-  localStorage.setItem("studentsDate", JSON.stringify(students));
-  showHide("section-edit");
+  
+    students[index] = await studentEdit;
+  
+    const headerBody = document.getElementsByClassName("header-body")[0];
+    headerBody.innerHTML = "";
+  
+    students.forEach((studentArray) => {
+      createStudentHtml(
+        studentArray.id,
+        studentArray.name,
+        studentArray.note,
+        studentArray.status,
+        studentArray.performance
+      );
+    });
+    localStorage.setItem("studentsDate", JSON.stringify(students));
+    showHide("section-edit");
+  }
 });

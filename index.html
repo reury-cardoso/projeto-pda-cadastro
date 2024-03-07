@@ -5,9 +5,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>School Board</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="./css/styleSecondary.css" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
     rel="stylesheet" />
+  <link rel="shortcut icon" href="./assets/icon-cap.svg" type="image/x-icon">
 </head>
 
 <body>
@@ -91,7 +93,7 @@
         <span>Gerencie e visualize o desempenho de seus alunos, adicione, edite
           ou exclua informações.</span>
       </div>
-      <img src="shcool.png" alt="a" class="supplies" />
+      <img src="./assets/shcool.png" alt="a" class="supplies" />
     </article>
 
     <section id="panel-main">
@@ -164,7 +166,7 @@
         <h1>Edite informações de um(a) aluno(a)</h1>
       </div>
       <div class="div-input div-input-edit">
-        <label for="id">ID</label>
+        <label for="idTag">ID</label>
         <input type="text" id="idTag" placeholder="1213" style="border: none;" readonly />
 
         <label for="name">Nome/Sobrenome</label>
@@ -173,8 +175,8 @@
         <label for="note-edit">Nota</label>
         <input min="0" max="10" type="number" id="note-edit" placeholder="Nota" required />
 
-        <label for="status-edit">Status</label>
-        <!-- <input type="radio" id="status-edit" placeholder="Nota" required /> -->
+        <label for="status-in-edit">Status</label>
+        <input style="display: none;" type="radio" id="status-in-edit" />
         <div id="status-op-edit">
           <input type="radio" name="statusEdit" value="not-analyzed" />Não analisado(a)
           <input type="radio" name="statusEdit" value="approved" />Aprovado(a)
@@ -184,8 +186,8 @@
       <button id="editReal">Atualizar</button>
     </main>
   </section>
-
-  <script src="script.js"></script>
+  <div id="erro-div"></div>
+  <script src="./js/script.js"></script>
 </body>
 
 </html>
