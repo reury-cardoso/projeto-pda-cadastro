@@ -33,12 +33,7 @@ function showHide(tagID) {
 
 const buttonAdd = document.getElementById("button-add");
 buttonAdd.addEventListener("click", () => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
   showHide("section-add");
-  document.body.style.overflow = "hidden";
 });
 
 const buttonClose = document.getElementById("close");
@@ -270,7 +265,7 @@ const editRealButton = document.getElementById("editReal");
 editRealButton.addEventListener("click", async () => {
   const idTag = +document.getElementById("idTag").value;
   const nameEdit = document.getElementById("name-edit").value;
-  const noteEdit = +document.getElementById("note-edit").value;
+  const noteEdit = document.getElementById("note-edit").value;
   const statusEdit = document.querySelector(
     'input[name="statusEdit"]:checked'
   ).value;
@@ -287,7 +282,7 @@ editRealButton.addEventListener("click", async () => {
     let studentEdit = await new CreateStudent(
       idTag,
       nameEdit,
-      noteEdit,
+      +noteEdit,
       statusEdit
     );
   
@@ -308,4 +303,22 @@ editRealButton.addEventListener("click", async () => {
     localStorage.setItem("studentsDate", JSON.stringify(students));
     showHide("section-edit");
   }
+});
+
+const inputFields = document.querySelectorAll(
+  "#add-student > div.div-input > input"
+);
+const submitButton = document.getElementById("addReal");
+
+inputFields.forEach(function (inputField, index) {
+  inputField.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      if (index < inputFields.length - 1) {
+        inputFields[index + 1].focus();
+      } else {
+        submitButton.click();
+      }
+    }
+  });
 });
