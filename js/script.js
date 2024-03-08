@@ -6,8 +6,6 @@ class CreateStudent {
     this.status = status;
     this.performance = `${+note * 10}%`;
   }
-
-  updateStudent(id, name, status, note) {}
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -27,8 +25,6 @@ function showHide(tagID) {
   const divTag = document.getElementById(tagID);
   divTag.classList.toggle("hidden");
   divTag.classList.toggle("visible");
-
-  document.body.style.overflow = "visible";
 }
 
 const buttonAdd = document.getElementById("button-add");
@@ -40,6 +36,7 @@ const buttonClose = document.getElementById("close");
 buttonClose.addEventListener("click", () => {
   showHide("section-add");
 });
+
 const buttonCloseEdit = document.getElementById("close-edit");
 buttonCloseEdit.addEventListener("click", () => {
   showHide("section-edit");
@@ -207,15 +204,15 @@ addRealbutton.addEventListener("click", async () => {
       student.status,
       student.performance
     );
-
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: "smooth",
-    });
+    
 
     showHide("section-add");
     await students.push(student);
     localStorage.setItem("studentsDate", JSON.stringify(students));
+
+    addRealbutton.setAttribute('disabled', '');
+    await sleep(1000)
+    addRealbutton.removeAttribute('disabled', '');
   }
 });
 
@@ -256,10 +253,6 @@ function editStudent(id) {
 
   showHide("section-edit");
 }
-
-// async function editStudentReal() {
-
-// }
 
 const editRealButton = document.getElementById("editReal");
 editRealButton.addEventListener("click", async () => {
@@ -302,6 +295,10 @@ editRealButton.addEventListener("click", async () => {
     });
     localStorage.setItem("studentsDate", JSON.stringify(students));
     showHide("section-edit");
+
+    editRealButton.setAttribute('disabled', '');
+    await sleep(1000)
+    editRealButton.removeAttribute('disabled', '');
   }
 });
 
@@ -309,7 +306,6 @@ const inputFields = document.querySelectorAll(
   "#add-student > div.div-input > input"
 );
 const submitButton = document.getElementById("addReal");
-
 inputFields.forEach(function (inputField, index) {
   inputField.addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
