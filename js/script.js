@@ -17,30 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
   dateTag.innerText = date;
 });
 
-async function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-function showHide(tagID) {
-  const divTag = document.getElementById(tagID);
-  divTag.classList.toggle("hidden");
-  divTag.classList.toggle("visible");
-}
-
-const buttonAdd = document.getElementById("button-add");
-buttonAdd.addEventListener("click", () => {
-  showHide("section-add");
-});
-
-const buttonClose = document.getElementById("close");
-buttonClose.addEventListener("click", () => {
-  showHide("section-add");
-});
-
-const buttonCloseEdit = document.getElementById("close-edit");
-buttonCloseEdit.addEventListener("click", () => {
-  showHide("section-edit");
-});
 
 function createStudentHtml(id, name, note, status, performance) {
   const headerBody = document.getElementsByClassName("header-body")[0];
@@ -131,10 +107,9 @@ function createStudentHtml(id, name, note, status, performance) {
   headerBody.appendChild(tr);
 }
 
-let students =
-  JSON.parse(localStorage.getItem("studentsDate")) == null
-    ? []
-    : JSON.parse(localStorage.getItem("studentsDate"));
+let localData = JSON.parse(localStorage.getItem("studentsDate"));
+let students = localData == null ? [] : localData;
+
 localStorage.setItem("studentsDate", JSON.stringify(students));
 
 students.forEach((studentArray) => {
@@ -147,22 +122,14 @@ students.forEach((studentArray) => {
   );
 });
 
-async function addTagError(nameErro) {
-  let documentBody = document.getElementById('erro-div');
-   documentBody.innerHTML +=  `<div id="erroTag" class="error hidden">
-  <div class="error__icon">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" height="24" fill="none"><path fill="#393a37" d="m13 13h-2v-6h2zm0 4h-2v-2h2zm-1-15c-1.3132 0-2.61358.25866-3.82683.7612-1.21326.50255-2.31565 1.23915-3.24424 2.16773-1.87536 1.87537-2.92893 4.41891-2.92893 7.07107 0 2.6522 1.05357 5.1957 2.92893 7.0711.92859.9286 2.03098 1.6651 3.24424 2.1677 1.21325.5025 2.51363.7612 3.82683.7612 2.6522 0 5.1957-1.0536 7.0711-2.9289 1.8753-1.8754 2.9289-4.4189 2.9289-7.0711 0-1.3132-.2587-2.61358-.7612-3.82683-.5026-1.21326-1.2391-2.31565-2.1677-3.24424-.9286-.92858-2.031-1.66518-3.2443-2.16773-1.2132-.50254-2.5136-.7612-3.8268-.7612z"></path></svg>
-  </div>
-  <div class="error__title">${nameErro}</div>
-</div>`;
-  await sleep(50);
-  showHide("erroTag")
-  await sleep(3000);
-  await showHide("erroTag")
-  await sleep(100);
-  let erroTag = document.getElementById('erroTag')
-  erroTag.remove()
-  return
+async function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function showHide(tagID) {
+  const divTag = document.getElementById(tagID);
+  divTag.classList.toggle("hidden");
+  divTag.classList.toggle("visible");
 }
 
 function generateID() {
@@ -171,50 +138,33 @@ function generateID() {
     if (studentArray.id == idGenerated) {
       generateID();
       break;
-    }
-  }
+    };
+  };
   return idGenerated;
 }
 
-const addRealbutton = document.getElementById("addReal");
-addRealbutton.addEventListener("click", async () => {
-  const name = document.getElementById("name");
-  const surname = document.getElementById("surname");
-  const note = document.getElementById("note");
+async function addTagError(nameErro, colorLog, timeLog) {
+  let documentBody = document.getElementById('erro-div');
+   documentBody.innerHTML +=  `<div style="background: ${colorLog};" id="erroTag" class="error hidden">
+  <div class="error__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" height="24" fill="none"><path fill="#393a37" d="m13 13h-2v-6h2zm0 4h-2v-2h2zm-1-15c-1.3132 0-2.61358.25866-3.82683.7612-1.21326.50255-2.31565 1.23915-3.24424 2.16773-1.87536 1.87537-2.92893 4.41891-2.92893 7.07107 0 2.6522 1.05357 5.1957 2.92893 7.0711.92859.9286 2.03098 1.6651 3.24424 2.1677 1.21325.5025 2.51363.7612 3.82683.7612 2.6522 0 5.1957-1.0536 7.0711-2.9289 1.8753-1.8754 2.9289-4.4189 2.9289-7.0711 0-1.3132-.2587-2.61358-.7612-3.82683-.5026-1.21326-1.2391-2.31565-2.1677-3.24424-.9286-.92858-2.031-1.66518-3.2443-2.16773-1.2132-.50254-2.5136-.7612-3.8268-.7612z"></path></svg>
+  </div>
+  <div class="error__title">${nameErro}</div>
+</div>`;
 
-  if (name.value == "" || surname.value == "" || note.value == "") {
-    await addTagError("ERRO: Preencha todos os campos obrigatórios.");
-  } else if (note.value > 10 || note.value < 0) {
-    await addTagError("ERRO: Certifique-se de que a nota esteja entre 0 e 10.");
-  } else {
-    const id = generateID();
+  await sleep(50);
+  showHide("erroTag");
 
-    let status = "not-analyzed";
+  let time = timeLog == undefined || typeof timeLog == 'string' ? 3000 : timeLog;
 
-    let student = await new CreateStudent(
-      id,
-      `${name.value} ${surname.value}`,
-      note.value,
-      status
-    );
-    createStudentHtml(
-      student.id,
-      student.name,
-      student.note,
-      student.status,
-      student.performance
-    );
-    
+  await sleep(time);
+  await showHide("erroTag");
+  await sleep(100);
 
-    showHide("section-add");
-    await students.push(student);
-    localStorage.setItem("studentsDate", JSON.stringify(students));
-
-    addRealbutton.setAttribute('disabled', '');
-    await sleep(1000)
-    addRealbutton.removeAttribute('disabled', '');
-  }
-});
+  let erroTag = document.getElementById('erroTag');
+  erroTag.remove();
+  return;
+}
 
 async function deleteStudent(id) {
   let studentDiv = document.getElementById(`id${id}`);
@@ -253,6 +203,56 @@ function editStudent(id) {
 
   showHide("section-edit");
 }
+
+const buttonAdd = document.getElementById("button-add");
+buttonAdd.addEventListener("click", () => {
+  document.getElementById("name").value = '';
+  document.getElementById("surname").value = '';
+  document.getElementById("note").value = ''
+  showHide("section-add");
+});
+
+const addRealbutton = document.getElementById("addReal");
+addRealbutton.addEventListener("click", async () => {
+  const name = document.getElementById("name");
+  const surname = document.getElementById("surname");
+  const note = document.getElementById("note");
+
+  if (name.value == "" || surname.value == "" || note.value == "") {
+    await addTagError("ERRO: Preencha todos os campos obrigatórios.");
+  } else if (note.value > 10 || note.value < 0) {
+    await addTagError("ERRO: Certifique-se de que a nota esteja entre 0 e 10.");
+  }else if(name.value.length < 3){
+    await addTagError("ERRO: O primeiro nome precisa ter 3 ou mais letras.")
+  }else {
+    const id = generateID();
+
+    let status = "not-analyzed";
+
+    let student = await new CreateStudent(
+      id,
+      `${name.value} ${surname.value}`,
+      note.value,
+      status
+    );
+    createStudentHtml(
+      student.id,
+      student.name,
+      student.note,
+      student.status,
+      student.performance
+    );
+    
+
+    showHide("section-add");
+    await students.push(student);
+    localStorage.setItem("studentsDate", JSON.stringify(students));
+
+    addRealbutton.setAttribute('disabled', '');
+    await sleep(1000)
+    addRealbutton.removeAttribute('disabled', '');
+  }
+});
 
 const editRealButton = document.getElementById("editReal");
 editRealButton.addEventListener("click", async () => {
@@ -297,11 +297,66 @@ editRealButton.addEventListener("click", async () => {
     showHide("section-edit");
 
     editRealButton.setAttribute('disabled', '');
-    await sleep(1000)
+    await sleep(1000);
     editRealButton.removeAttribute('disabled', '');
   }
 });
 
+const buttonClose = document.getElementById("close");
+buttonClose.addEventListener("click", () => {
+  showHide("section-add");
+});
+
+const buttonCloseEdit = document.getElementById("close-edit");
+buttonCloseEdit.addEventListener("click", () => {
+  showHide("section-edit");
+});
+
+
+let localDataNote = JSON.parse(localStorage.getItem("NoteMin"));
+let noteMin = localDataNote == null ? false : localDataNote;
+
+localStorage.setItem("NoteMin", JSON.stringify(noteMin));
+
+const setNote  = document.getElementById('setNote')
+setNote.addEventListener('click', async () =>{
+  let noteMinValue = +document.getElementById('minNote').value;
+  if (noteMinValue == "") {
+    await addTagError("ERRO: Preencha todo o campo de nota.");
+  } else if (noteMinValue > 10 || noteMinValue < 0) {
+    await addTagError("ERRO: Certifique-se de que a nota esteja entre 0 e 10.");
+  } else {
+    await showHide("minNote-div");
+    noteMin = noteMinValue;
+    await localStorage.setItem("NoteMin", JSON.stringify(noteMin));
+    await document.getElementById("analyze-notes").click();
+  }
+})
+
+const analyzeNotes = document.getElementById("analyze-notes");
+analyzeNotes.addEventListener("click", async () => {
+  if(students == ''){
+    await addTagError("ERRO: Não há alunos cadastrados.");
+  }else if(noteMin == false){
+   await showHide("minNote-div");
+  }else{
+    students.forEach((student) => {
+      let note = student.note;
+      let status;
+      if(note < noteMin){
+        status = 'disapproved'
+      }else{
+        status = 'approved'
+      }
+      student.status = status
+    })
+    await addTagError("SUCESSO: Status atualizados.", "#45993d", 1000);
+    localStorage.setItem("studentsDate", JSON.stringify(students));
+    location.reload();
+  }
+})
+
+// feature of navigating between inputs (add students) with Enter
 const inputFields = document.querySelectorAll(
   "#add-student > div.div-input > input"
 );
@@ -314,7 +369,7 @@ inputFields.forEach(function (inputField, index) {
         inputFields[index + 1].focus();
       } else {
         submitButton.click();
-      }
-    }
+      };
+    };
   });
 });

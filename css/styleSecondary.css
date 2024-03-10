@@ -1,8 +1,87 @@
+/* This CSS file was created for independent properties. */
+a { 
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: inherit;
+  text-decoration: none;
+ } 
+
+#minNote {
+  padding: 18px 35px 18px 20px;
+  border: 2px solid #f1f4ff;
+  border-radius: 10px;
+  
+  outline: 0;
+
+  font-weight: 500;
+  font-size: 16px;
+}
+
+button, #close, #close-edit, #list-social li {
+  transition: .2s ease all;
+  filter: blur(0);
+  backface-visibility: hidden;
+}
+
+button:hover, #close:hover, #close-edit:hover, #list-social li:hover{
+  transform:scale(1.02) ;
+  box-shadow: 5px 5px 16px -8px rgba(0,0,0,0.42);
+}
+
+.actions > button:hover {
+  box-shadow: none;
+  transform:scale(1.08) ;
+}
+
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease-in-out, visibility 0s linear 0.5s;
+}
+
+.visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease-in-out, visibility 0s linear;
+}
+
+
+.approved span {
+  font-weight: 600;
+  font-size: 14px;
+  
+  padding: 7px;
+  border-radius: 10px;
+  
+  background-color: #cdffcd;
+  color: #007f00;
+}
+
+.disapproved span {
+  font-weight: 600;
+  padding: 7px;
+  border-radius: 10px;
+  font-size: 14px;
+  background-color: #ffe0e0;
+  color: #d30000;
+}
+
+.not-analyzed span {
+  font-weight: 600;
+  padding: 7px;
+  border-radius: 10px;
+  font-size: 14px;
+  background-color: #ffeccc;
+  color: #965e00;
+}
+
 .error {
   bottom: 30px;
   right: 30px;
   z-index: 3;
-  position: absolute;
+  position: fixed;
   gap: 10px;
   
   padding: 15px;
