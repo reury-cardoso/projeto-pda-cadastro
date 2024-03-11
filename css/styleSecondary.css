@@ -109,3 +109,70 @@ button:hover, #close:hover, #close-edit:hover, #list-social li:hover{
   font-size: 17px;
   color: #fff;
 }
+
+@media only screen and (max-width: 1200px) {
+  .supplies{
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 950px) {
+  #add-student, #edit-student {
+    padding: 20px 30px;
+    width: 60%;
+  }
+  #close, #close-edit {
+    right: 23% !important;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #add-student, #edit-student {
+    height: 90%;
+  }
+  #sidebar{
+    display: none;
+  }
+  #dashbood{
+    margin-left: 0;
+  }
+  #add-student, #edit-student {
+    width: 80%;
+  }
+
+  #close, #close-edit {
+    top: 8% !important;
+    right: 15% !important;
+  }
+  .title {
+    font-size: 15px !important;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  #dashbood #initial {
+    padding: 16px 20px;
+  }
+  .not-analyzed span {
+    padding: 3px;
+  }
+  .student th:nth-child(5){
+    display: none !important;
+  }
+  .header-table tr th:nth-child(5){
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .student th:nth-child(1){
+    display: none !important;
+  }
+  .header-table tr th:nth-child(1){
+    display: none !important;
+  }
+  .error {
+    right: 0px !important;
+  }
+}
