@@ -1,4 +1,6 @@
-<h1 align="center"> Mini Projeto #02 - CRUD </h1>
+<!-- portfolio: Aplicação web -->
+<!-- portfolio-order: 4 -->
+<h1 align="center"> Cadastro de alunos - Mini Projeto #02 - CRUD </h1>
 
 <p align="center">
 Projeto desenvolvido para o módulo 02, do curso Programadores do Amanhã. <br/>
